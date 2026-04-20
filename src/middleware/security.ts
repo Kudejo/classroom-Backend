@@ -1,5 +1,5 @@
-import { Arcjet, slidingWindow } from "@arcjet/node";
-import { ne } from "drizzle-orm";
+import {  ArcjetNodeRequest, slidingWindow } from "@arcjet/node";
+import aj from "../config/arcjet.js";
 import { Request, Response, NextFunction } from "express";
 import { error } from "node:console";
 import { Socket } from "node:dgram";
@@ -39,11 +39,11 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
                 max: limit,
             })
         )
-        const arcjetRequest: Arcjet.Request = {
+        const arcjetRequest: ArcjetNodeRequest = {
             method: req.method,
             url: req.originalUrl ?? req.url,
             headers: req.headers,
-            Socket: {remoteAddress: req.socket.remoteAddress ?? req.ip ?? '0.0.0.0'} ,
+            socket: {remoteAddress: req.socket.remoteAddress ?? req.ip ?? '0.0.0.0'} ,
         };
 
         const decision = await client.protect(arcjetRequest);
@@ -59,7 +59,7 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
         }
 
         if (decision.isDenied() && decision.reason.isRateLimit()) {
-            res.status(403).json({error: "Forbidden", message});
+            res.status(429).json({error: "Forbidden", message});
             return;
         }
 
