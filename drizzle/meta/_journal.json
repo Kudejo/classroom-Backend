@@ -8,6 +8,20 @@
       "when": 1776258817296,
       "tag": "0000_foamy_captain_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776686602394,
+      "tag": "0001_loving_black_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776686790987,
+      "tag": "0002_lyrical_mystique",
+      "breakpoints": true
     }
   ]
 }
