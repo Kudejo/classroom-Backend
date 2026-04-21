@@ -8,6 +8,8 @@ import subjectsRouter from "./routes/subject.js";
 import securityMiddleware from "./middleware/security.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
+import usersRouter from "./routes/users.js";
+import classesRouter from "./routes/classes.js";
 
 const app = express();
 const PORT = 8000;
@@ -26,8 +28,10 @@ app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use(express.json());
 app.use(securityMiddleware);
 
-app.use("/api/subjects", subjectsRouter);
 // Routes
+app.use("/api/subjects", subjectsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/classes", classesRouter);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Classroom API" });
 });

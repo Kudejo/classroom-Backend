@@ -5,7 +5,7 @@ import { error } from "node:console";
 import { Socket } from "node:dgram";
 
 const securityMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    if(process.env.NODE_ENV === "test") return next();
+    if(process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") return next();
 
     try {
         const role: RateLimitRole = req.user?.role ?? "guest";
@@ -15,16 +15,16 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
 
         switch (role) {
             case "admin":
-                limit = 20;
-                message = "Admin request limit exceeded. (20 requests per minute).";
+                limit = 30;
+                message = "Admin request limit exceeded. (30 requests per minute).";
                 break;
             case "teacher":
-                limit = 15;
-                message = "Teacher request limit exceeded. (15 requests per minute). Please wait.";
+                limit = 25;
+                message = "Teacher request limit exceeded. (25 requests per minute). Please wait.";
                 break;
             case "student":
-                limit = 10;
-                message = "User request limit exceeded. (10 requests per minute). Please wait";
+                limit = 20;
+                message = "Student request limit exceeded. (20 requests per minute). Please wait";
                 break;
             default:
                 limit = 5;
