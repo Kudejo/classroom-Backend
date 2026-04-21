@@ -1,5 +1,3 @@
-import AgentAPI from "apminsight";
-AgentAPI.config()
 import express from "express";
 import cors from "cors";
 import subjectsRouter from "./routes/subject";
@@ -18,12 +16,12 @@ app.use(cors({
     credentials: true
 }));
 
-
+app.all('/api/auth/*splat', toNodeHandler(auth));
 
 // Middleware
 app.use(express.json());
 app.use(securityMiddleware);
-app.all('/api/auth/*splat', toNodeHandler(auth));
+
 app.use("/api/subjects", subjectsRouter);
 // Routes
 app.get("/", (req, res) => {
