@@ -1,10 +1,9 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../db"; // your drizzle instance
-import * as schema from "../db/schema"; // your drizzle schema definitions
+import { db } from "../db/index.js"; // your drizzle instance
+import * as schema from "../db/schema/auth.js";
 
 export const auth = betterAuth({
-    baseURL: process.env.BETTER_AUTH_URL || process.env.BACKEND_BASE_URL,
     secret: process.env.BETTER_AUTH_SECRET!,
     trustedOrigins: [process.env.FRONTEND_URL!],
     database: drizzleAdapter(db, {
