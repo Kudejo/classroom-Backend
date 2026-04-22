@@ -129,4 +129,34 @@ router.post('/', async (req, res) => {
     }
 })
 
+//Get class details with teacher, subject, and department
+router.get('/:id', async (req, res) => {
+    const classId = Number(req.params.id);
+
+    if(!Number.isFinite(classId)) return res.status(400).json({ error: 'Invalid class ID' });
+
+    const [classDetails] = await db
+        .select({
+            ...getTableColumns(classes),
+            subject: {
+                ...getTableColumns(subjects),
+            },
+            department: {
+                ...getTableColumns(departments),
+            },
+            teacher: {
+                ...getTableColumns(user),
+            }
+        })
+        .from(classes)
+        .leftJoin(subjects, eq(classes.subjectId, subjects.id))
+        .leftJoin(user, eq(classes.teacherId, user.id))
+        .leftJoin(departments, eq(subjects.departmentId, departments.id))
+        .where(eq(classes.id, classId));
+
+    if(!classDetails) return res.status(404).json({ error: 'Class not found' });
+
+    res.status(200).json({ data: classDetails });
+});
+
 export default router;
